@@ -12,6 +12,22 @@ export function useGetter(arr) {
   return Object.fromEntries(getters);
 }
 
+export function useGetterSetter(arr) {
+  const store = useStore();
+  const gettersSetters = arr.map(([g, s]) => [
+    g,
+    computed({
+      get() {
+        return store.state[g];
+      },
+      set(value) {
+        return store.commit(s, value);
+      }
+    })
+  ]);
+  return Object.fromEntries(gettersSetters);
+}
+
 export function useMutation(arr) {
   const store = useStore();
   const mutations = arr.map(m => [m, input => store.commit(m, input)]);
